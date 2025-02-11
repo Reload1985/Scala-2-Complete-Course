@@ -111,6 +111,29 @@ object TuplesAndMaps extends App{
   println(nFriends(testNet, "Bob"))
 
   def mostFriends(network: Map[String, Set[String]]): String =
-    network.maxBy()
+    network.maxBy(pair => pair._2.isEmpty)._1
 
+  println(mostFriends(testNet))
+
+  def nPeopleWithNoFriends(network: Map[String, Set[String]]): Int =
+    network.count(_._2.isEmpty)
+
+  println(nPeopleWithNoFriends(testNet))
+
+  def socialConnection(network: Map[String, Set[String]], a: String, b: String): Boolean = {
+    def bfs(target: String, consideredPeople: Set[String], discoveredPeople: Set[String]): Boolean = {
+      if(discoveredPeople.isEmpty) false
+      else{
+        val person = discoveredPeople.head
+        if(person == target) true
+        else if(consideredPeople.contains(person)) bfs(target, consideredPeople, discoveredPeople.tail)
+        else bfs(target, consideredPeople + person, discoveredPeople.tail ++ network(person))
+      }
+    }
+
+    bfs(b, Set(), network(a) + a)
+  }
+
+  println(socialConnection(testNet, "Mary", "Jim"))
+  println(socialConnection(network, "Mary", "Bob"))
 }
