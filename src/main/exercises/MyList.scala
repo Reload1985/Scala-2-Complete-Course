@@ -1,3 +1,5 @@
+package exercises
+
 import java.util.stream.Gatherers
 import scala.language.postfixOps
 
